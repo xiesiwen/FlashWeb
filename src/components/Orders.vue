@@ -16,6 +16,10 @@
         </ol>
         <div>学生电话:   {{order.get('studentId')}}</div>
         <div>学生地址:   {{order.get('place')}}</div>
+        <div>
+    <input v-model="order.input"><button v-on:click="startDistributorId(order)">添加配送员</button>
+    </div>
+    <button v-on:click="finishOrder(order)">完成订单</button>
       </li>
       </ol>
     </div>
@@ -40,10 +44,10 @@ export default {
   computed: {},
   methods: {
     seeOrders() {
-      var that = this
-      console.log(this.$refs.input1.value)
-      var order = Bmob.Object.extend("Orders")
-      var query = new Bmob.Query(order)
+      var that = this;
+      console.log(this.$refs.input1.value);
+      var order = Bmob.Object.extend("Orders");
+      var query = new Bmob.Query(order);
       //普通用户
       if (this.userInfos.uLevel == 1) {
         query.equalTo("studentId", this.userInfos.phone);
@@ -54,10 +58,10 @@ export default {
       query.find({
         success: function(results) {
           console.log("共查询到 " + results.length + " 条记录");
-          that.orderList = []
+          that.orderList = [];
           for (var i = 0; i < results.length; i++) {
-            var object = results[i]
-            that.orderList.push(object)
+            var object = results[i];
+            that.orderList.push(object);
           }
         },
         error: function(error) {
@@ -75,16 +79,49 @@ export default {
         success: function(results) {
           if (results.length == 0) {
             console.log("您还没有下单，没有订单信息");
-          } else{
+          } else {
             this.userInfos.uLevel = results[0].get("uLevel");
             this.userInfos.phone = results[0].get("username");
-            localStorage.setItem("uLevel", this.userInfos.uLevel)
-            localStorage.setItem("phone",this.userInfos.phone)
-            seeOrders()
+            localStorage.setItem("uLevel", this.userInfos.uLevel);
+            localStorage.setItem("phone", this.userInfos.phone);
+            seeOrders();
           }
         },
         error: function(error) {
           console.log("您还没有下单，没有订单信息");
+        }
+      });
+    },
+
+    startDistributorId: function(object) {
+      var input_value = object.input;
+      console.log("input is " + input_value);
+      var Orders = Bmob.Object.extend("Orders");
+      var query = new Bmob.Query(Orders);
+      query.get(object.id, {
+        success: function(order) {
+          console.log("save success");
+          order.set("distributorId", input_value);
+          order.save();
+          object.set("distributorId", input_value);
+        },
+        error: function(object, error) {}
+      });
+    },
+
+    finishOrder: function(object) {
+      console.log("finish oid is " + object.id);
+      var Orders = Bmob.Object.extend("Orders");
+      var query = new Bmob.Query(Orders);
+      query.get(object.id, {
+        success: function(order) {
+          console.log("save success");
+          order.set("done", true);
+          order.save();
+          object.set("done", true);
+        },
+        error: function(object, error) {
+          console.log("save error");
         }
       });
     }
