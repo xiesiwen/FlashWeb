@@ -16,7 +16,6 @@
 export default {
   name: "App",
   created() {
-    this.$router.push("/products");
     Bmob.initialize(
       "789f6711a42cb8e61a5dde589b559e69",
       "55e875d5e5ef1476762ad60c5baeacc6"
