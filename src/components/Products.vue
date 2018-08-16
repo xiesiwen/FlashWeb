@@ -6,8 +6,20 @@
             <div>分类：{{product.get('classify')}}</div>
             <div>名称：{{product.get('name')}}</div>
             <div>价格：{{product.get('price')}}</div>
+            <button v-on:click="addSelect(product)">添加到购物车</button>
+            <button v-on:click="delSelect(product)" v-show="selects.indexOf(product) < 0 ? false : true">从购物车移除</button>
         </li>
-        </ol>
+      </ol>
+
+    <button v-on:click="preSubmitOrder()">提交订单</button>
+    <h2>选择的宝贝</h2>
+      <ol>
+        <li v-for="(product, index) in selects" :key="product.id">
+            <div>名称：{{product.get('name')}}</div>
+            <div>数量：{{selectNum[index]}}</div>
+            <div>总价：{{product.get('price') * selectNum[index]}}</div>
+        </li>
+      </ol>
   </div>
 </template>
 
@@ -18,7 +30,9 @@ export default {
     return {
       phone: "",
       products: [],
-      schools: []
+      schools: [],
+      selects: [],
+      selectNum: []
     };
   },
   created() {
@@ -54,46 +68,85 @@ export default {
     });
   },
   methods: {
-    register: function() {
-      var user = new Bmob.User();
-      user.set("username", "phone");
-      user.set("password", "123456");
-      user.set("school", "");
-      user.set("place", "");
-      user.set("uLevel", 1);
-      user.signUp(null, {
-        success: function(user) {
-          order();
-        },
-        error: function(user, error) {
-          // Show the error message somewhere and let the user try again.
-          alert("Error: " + error.code + " " + error.message);
-        }
-      });
-    },
-    preOrder: function() {
-      var user = Bmob.Object.extend("_User");
-      var query = new Bmob.Query(user);
-      query.equalTo("username", "123456");
-      query.find({
-        success: function(results) {
-          if (results.length == 0) {
-            register();
-          } else {
-            order();
-          }
-        },
-        error: function(error) {
-          console.log("您还没有下单，没有订单信息");
-        }
-      });
+    addSelect: function(product) {
+      var index = this.selects.indexOf(product);
+      if (index < 0) {
+        this.selects.push(product);
+        this.selectNum.push(1);
+      } else {
+        this.selectNum[index] = this.selectNum[index] + 1;
+      }
     },
 
-    order: function() {
+    delSelect: function(product) {
+      var index = this.selects.indexOf(product);
+      if (index >= 0) {
+        var num = this.selectNum[index];
+        if (num == 1) {
+          this.selects.splice(index);
+          this.selectNum.splice(index);
+        } else {
+          this.selectNum[index] = num - 1;
+        }
+      }
+    },
+
+    preSubmitOrder: function() {
+      this.phone = localStorage.getItem("phone");
+      var that = this
+      if (!this.phone) {
+        var user = new Bmob.User();
+        user.set("username", "15671559222");
+        user.set("password", "123456");
+        user.set("uLevel", 1);
+        user.set("school", "上海理工大学");
+        user.set("place", "新世界213");
+        user.signUp(null, {
+          success: function(user) {
+            localStorage.setItem("phone", "15671559222");
+            localStorage.setItem("uLevel", 1);
+            localStorage.setItem("school", "上海理工大学");
+            localStorage.setItem("place", "新世界213");
+            that.submitOrder();
+          },
+          error: function(user, error) {
+            alert("Error: " + error.code + " " + error.message);
+          }
+        });
+      } else {
+        this.submitOrder();
+      }
+    },
+
+    submitOrder: function() {
+      this.phone = localStorage.getItem("phone");
+      var school = localStorage.getItem("school");
+      var place = localStorage.getItem("place");
       var Order = Bmob.Object.extend("Orders");
+      var totalPrice = 0
+      var income = 0
+      var datas=[];
+      for(var i = 0 ; i < this.selects.length ;i++){
+        var product = this.selects[i]
+        var num = this.selectNum[i]
+        var price = product.get('price')
+        var total = num*price
+        var data = {}
+        data["name"] = product.get('name')
+        data["num"] = num
+        data["total"] = total
+        datas.push(data)
+        totalPrice += total
+        income += num * (price - product.get('originalPrice'))
+      }
       var order = new Order();
       order.set("studentId", this.phone);
-      //todo add more
+      order.set("school", school);
+      order.set("place", place);
+      order.set("products", JSON.stringify(datas));
+      order.set("price", totalPrice);
+      order.set("income", income);
+      order.set("done", false);
       order.save(null, {
         success: function(order) {
           alert("添加数据成功，返回的objectId是：" + order.id);

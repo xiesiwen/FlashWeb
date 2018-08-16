@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view v-if="true"/>
+    </keep-alive>
      <section id='foot_guide'>
         <section @click = "gotoAddress({path: '/products'})" class="guide_item">
             <span>商品</span>

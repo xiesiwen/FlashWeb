@@ -2,7 +2,7 @@
   <div>
     <h2>订单</h2>
     <div>
-    <input ref="input1"><button v-on:click="seeOrders">查看订单</button>
+    <input type="text" v-model="input" /><button v-on:click="submitUsernameInput(input)">查看订单</button>
     </div>
     <div>
       <ol>
@@ -17,9 +17,11 @@
         <div>学生电话:   {{order.get('studentId')}}</div>
         <div>学生地址:   {{order.get('place')}}</div>
         <div>
+          <div v-show="userInfos.uLevel > 2? true : false">
     <input v-model="order.input"><button v-on:click="startDistributorId(order)">添加配送员</button>
     </div>
-    <button v-on:click="finishOrder(order)">完成订单</button>
+    </div>
+    <button v-on:click="finishOrder(order)" v-show="userInfos.uLevel > 2? true : false">完成订单</button>
       </li>
       </ol>
     </div>
@@ -31,29 +33,28 @@ export default {
   name: "Orders",
   data() {
     return {
+      input: "",
       userInfos: {},
       orderList: []
     };
   },
   created() {
-    // this.userInfos.phone = localStorage.getItem('phone')
-    // this.userInfos.level = localStorage.getItem('level')
-    this.userInfos.uLevel = 5;
-    this.userInfos.phone = "15671551111";
+    this.userInfos.phone = localStorage.getItem("phone");
+    this.userInfos.uLevel = localStorage.getItem("uLevel");
   },
   computed: {},
   methods: {
-    seeOrders() {
+    seeOrders: function(phone, level) {
+      console.log("phone is " + phone + " level is " + level);
       var that = this;
-      console.log(this.$refs.input1.value);
       var order = Bmob.Object.extend("Orders");
       var query = new Bmob.Query(order);
       //普通用户
-      if (this.userInfos.uLevel == 1) {
-        query.equalTo("studentId", this.userInfos.phone);
+      if (level <= 1) {
+        query.equalTo("studentId", phone);
         //配送员
-      } else if (this.userInfos.uLevel == 2) {
-        query.equalTo("distributorId", this.userInfos.phone);
+      } else if (level == 2) {
+        query.equalTo("distributorId", phone);
       } //其他情况，是超级用户
       query.find({
         success: function(results) {
@@ -70,8 +71,9 @@ export default {
       });
     },
 
-    submitUsernameInput: function(e) {
-      var usernameinput = this.$refs.input1.value;
+    submitUsernameInput: function(phone) {
+      var that = this;
+      var usernameinput = phone;
       var user = Bmob.Object.extend("_User");
       var query = new Bmob.Query(user);
       query.equalTo("username", usernameinput);
@@ -80,11 +82,11 @@ export default {
           if (results.length == 0) {
             console.log("您还没有下单，没有订单信息");
           } else {
-            this.userInfos.uLevel = results[0].get("uLevel");
-            this.userInfos.phone = results[0].get("username");
-            localStorage.setItem("uLevel", this.userInfos.uLevel);
-            localStorage.setItem("phone", this.userInfos.phone);
-            seeOrders();
+            that.userInfos.uLevel = results[0].get("uLevel");
+            that.userInfos.phone = results[0].get("username");
+            localStorage.setItem("uLevel", that.userInfos.uLevel);
+            localStorage.setItem("phone", that.userInfos.phone);
+            that.seeOrders(that.userInfos.phone, that.userInfos.uLevel);
           }
         },
         error: function(error) {
