@@ -10,9 +10,13 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "better-scroll": "^0.1.15",
+    "bmob": "^2.1.0",
     "data_js": "^0.3.0",
+    "request": "^2.88.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
     "vux": "^2.9.2"
   },
   "devDependencies": {

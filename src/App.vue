@@ -3,30 +3,35 @@
     <keep-alive>
       <router-view v-if="true"/>
     </keep-alive>
-     <section id='foot_guide'>
+     <!-- <section id='foot_guide'>
         <section @click = "gotoAddress({path: '/products'})" class="guide_item">
             <span>商品</span>
         </section>
         <section @click = "gotoAddress({path: `/orders`})" class="guide_item">
             <span>我的</span>
         </section>
-    </section>
+    </section> -->
+    <foot-guide></foot-guide>
+    <svgIcon></svgIcon>
   </div>
 </template>
 
 <script>
+import svgIcon from './components/common/svg';
+import footGuide from './components/common/footer/footGuide.vue';
+
 export default {
   name: "App",
   created() {
-    Bmob.initialize(
-      "789f6711a42cb8e61a5dde589b559e69",
-      "55e875d5e5ef1476762ad60c5baeacc6"
-    );
   },
   methods: {
     gotoAddress(path) {
       this.$router.push(path);
     }
+  },
+  components:{
+    svgIcon,
+     'foot-guide':footGuide
   }
 };
 </script>
@@ -39,7 +44,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 #foot_guide {
   background-color: #fff;
