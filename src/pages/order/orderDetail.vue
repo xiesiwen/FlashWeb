@@ -30,6 +30,12 @@
                             <p>{{orderData.orderId}}</p>
                         </div>
                     </section>
+                    <section class="item_style" v-if='showSetDisInput'>
+                        <p class="item_left">收益：</p>
+                        <div class="item_right">
+                            <p><span class="c-red">¥{{orderData.income}}</span></p>
+                        </div>
+                    </section>
                     <section class="item_style">
                         <p class="item_left">订单状态：</p>
                         <div class="item_right">

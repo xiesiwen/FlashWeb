@@ -303,7 +303,7 @@ export default {
       data.school = this.user_info.school;;
       data.goods = goods;
       data.price = parseFloat(this.totalPrice);
-      data.income = +income;//此单利润
+      data.income = +(income - this.discount);//此单利润
       data.comments = params.remarks;
       data.preference = this.discount;
       addOrder(data, res => {

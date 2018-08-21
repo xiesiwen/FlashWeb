@@ -222,11 +222,20 @@
                     }
                 }                
             },
-          getFirstProductName:function(){
-            return '拖鞋'
+          getFirstProductName:function(item){
+            let products = JSON.parse(item.products);
+            if(products.length){
+                return products[0].name;
+            }
+
+            return '生活用品'
           },
-          contProductsNum:function(){
-            return '等8件商品'
+          contProductsNum:function(item){
+            let products = JSON.parse(item.products);
+            if(products.length){
+                return `等${products.length}件商品`
+            }
+            return ''
           },
         }
     }

@@ -74,5 +74,4 @@ $blue:#41838C;
 @mixin fj($type: space-between){
 	display: flex;
 	justify-content: $type;
-
 }
