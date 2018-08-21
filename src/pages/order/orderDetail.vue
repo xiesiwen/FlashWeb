@@ -287,7 +287,7 @@
         }
         .btn{
             padding: 0 20px;
-            background-color: #4cd964;
+            background-color: $green;
             border-radius: 5px;
             color: #fff;
             display: inline-flex;

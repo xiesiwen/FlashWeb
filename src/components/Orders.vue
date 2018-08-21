@@ -2,7 +2,7 @@
     <div class="order_page">
         <head-top :head-title="headTitle" go-back='true'></head-top>
         <userLogin @success='loginSuccess' v-if='! (userInfo && userInfo.phone)' :login-type='userType'></userLogin>
-        <section v-if='userInfo && ~[3,5].indexOf(userInfo.uLevel)'>
+        <section class="state-wrap" v-if='userInfo && ~[3,5].indexOf(userInfo.uLevel)'>
              <span class="btn-state" :class='{cur:this.orderState == 1}' @click='setOrderState(1)'>待接单</span>
              <span class="btn-state" :class='{cur:this.orderState == 2}' @click='setOrderState(2)'>派送中</span>
              <span class="btn-state" :class='{cur:this.orderState == 3}' @click='setOrderState(3)'>已完成</span>
@@ -243,14 +243,19 @@
             font-family: Helvetica Neue,Tahoma,Arial;
         }
     }
+    .state-wrap{
+        padding:.3rem 0;
+    }
     .btn-state{
         font-size: 0.55rem;
-        color: #3190e8;
-        border: 0.025rem solid #3190e8;
-        padding: .1rem .2rem;
+        color: $blue;
+        border: 0.025rem solid $blue;
+        padding: .2rem 1rem;
         border-radius: .15rem;
         &.cur{
-           border: 0.025rem solid red; 
+           background-color:$blue;
+           color:#fff; 
+
         }
     }
     .order_list_ul{

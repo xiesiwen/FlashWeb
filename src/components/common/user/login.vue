@@ -78,7 +78,8 @@
     @import '../../../style/mixin';
 
     .loginContainer{
-        padding-top: 1.95rem;
+        // padding-top: 1.95rem;
+        background-color:#fff;
         p, span, input{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
@@ -142,7 +143,7 @@
         }
     }
     .login_tips{
-        @include sc(.5rem, red);
+        @include sc(.5rem, $red_2);
         padding: .4rem .6rem;
         line-height: .5rem;
         a{
@@ -150,13 +151,15 @@
         }
     }
     .login_container{
-        margin: 0 .5rem 1rem;
         @include sc(.7rem, #fff);
-        background-color: #4cd964;
-        padding: .5rem 0;
+        background-color: $green;
         border: 1px;
         border-radius: 0.15rem;
+        margin: .5rem .5rem 1rem;
+        background-color: #50AF61;
+        padding: .3rem 2rem;
         text-align: center;
+        display: inline-block;
     }
     .button_switch{
         background-color: #ccc;
