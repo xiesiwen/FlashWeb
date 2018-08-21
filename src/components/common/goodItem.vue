@@ -1,6 +1,5 @@
  <template>
 	<div class="menu_detail_link">
-        <head-top :head-title="goodData.classify" :go-back='false'></head-top>
         <section class="menu_food_img">
             <img :src="goodData.image.url">
         </section>
@@ -21,7 +20,6 @@
 </template>
 
 <script>
-	import headTop from './header/head'
     export default {
     	data(){
             return{
@@ -50,7 +48,7 @@
          //    this.shopId = this.$route.query.shopId;
         },
         components: {
-        	headTop,
+        	
         },
         props:['goodData'],
         methods: {

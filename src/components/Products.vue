@@ -1,5 +1,6 @@
 <template>
   <div class="shop_container">
+    <head-top :head-title="curClassify" :go-back='false'></head-top>
     <section class="discount-info">全场每满{{discountMax}}减{{discountNum}}元</section>
      <section class="food_container">
           <section class="menu_container">
@@ -124,11 +125,14 @@ import goodItem from './common/goodItem.vue'
 import BuyCart from './common/buyCart.vue'
 import infoForm from './common/addAddress.vue'
 import loading from './common/loading'
+import headTop from './common/header/head'
+
 export default {
   name: "Products",
   components:{
     goodItem,
     loading,
+    headTop,
     'buy-cart':BuyCart,
     'info-form':infoForm
   },
@@ -155,6 +159,12 @@ export default {
     },
     user_info: function(){
       return {...this.userInfo}
+    },
+    curClassify: function(){
+
+        if(this.menuList.length){
+            return this.menuList[this.menuIndex].classify || '商品列表'
+        }
     },
     //购物车中总共商品的数量
     totalNum: function (){
@@ -197,7 +207,9 @@ export default {
     },
     chooseMenu:function(index){
         this.menuIndex = index;
+        // this.curClassify = this.menuList[this.menuIndex].class_name;
         let _this = this;
+
         _this.showLoading = true;
         getGoodsByClassId({class_id:this.menuList[this.menuIndex].class_id},res=>{
           console.log('getGoodsByClassId',res);
