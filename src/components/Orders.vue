@@ -50,6 +50,8 @@
     import {queryOrderById,
         queryDisOrder,
         queryAllOrder} from '../service/orderBmob.js'
+        
+    import {addTrack} from '../service/accessData.js'
     import {login,getCourierList} from '../service/userData.js'
     import {loadMore} from './common/mixin'
     import footGuide from './common/footer/footGuide.vue'
@@ -70,6 +72,7 @@
             }
         },
         created(){
+            let _this = this;
             this.userType = +(this.$route.query.usertype?this.$route.query.usertype:1);
             // this.userType = +(this.$route.query.usertype?this.$route.query.usertype:1);
             if(this.$route.query.logout == 1){
@@ -77,20 +80,18 @@
                 this.OUT_LOGIN();
                 this.showLoading = false;
             }
-            // if(!~[2,3,5].indexOf(this.loginType)){
-            //     console.log('123123');
-            //     this.OUT_LOGIN();
-            // }else{
-            // }
-            // if(this.userType){
-            //     this.OUT_LOGIN();
-            // }
             this.INIT_USERINFO();//初始化用户信息
+            addTrack({
+                phone:_this.userInfo.phone,
+                action:'orders',
+               });
 
         },
         mounted(){
             if(this.login){
                 this.initData();
+            }else{
+                this.showLoading = false;
             }
         },
         mixins: [loadMore],
@@ -208,7 +209,9 @@
                 if (value && value.phone) {
                     this.initData();
                 }
-            }
+            },
+            // 如果路由有变化，会再次执行该方法
+            "$route": "initData"
         },
         filters:{
           getStatus:function(order){
@@ -245,7 +248,7 @@
     @import '../style/mixin.scss';
     .order_page{
         background-color: #F5F5F5;
-        margin-bottom: 1.95rem;
+        margin-bottom: 3rem;
         padding-top: 1.95rem;
         overflow-y: auto;
         p, span, h4{

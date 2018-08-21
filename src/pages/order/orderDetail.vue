@@ -122,6 +122,7 @@
     import headTop from '../../components/common/header/head'
     import {getOrderDetailById,finishOrder,setDistributor} from '../../service/orderBmob.js'
     import {getCourierList} from '../../service/userData.js'
+    import {addTrack} from '../../service/accessData.js'
     import loading from '../../components/common/loading'
     import footGuide from '../../components/common/footer/footGuide.vue'
     import BScroll from 'better-scroll'
@@ -170,6 +171,10 @@
                 ]),
             initData(){
                 let _this = this;
+                addTrack({
+                    phone:_this.userInfo.phone,
+                    action:'orderDetail',
+                   });
                 _this.showLoading = true;
                 if (this.userInfo && this.userInfo.phone && this.orderId) {
                     getOrderDetailById(this.userInfo, +this.orderId,res => {
@@ -325,7 +330,7 @@
         overflow-y: auto;
     }
     .scroll_insert{
-        padding-bottom: 3rem;
+        padding-bottom: 4rem;
     }
     .order_titel{
         display: flex;

@@ -46,12 +46,13 @@
     	left: 50%;
     	transform: translate(-50%, -50%);
     	@include wh(2.5rem, 2.5rem);
+        z-index:999;
     }
     .load_img{
     	@include wh(100%, 100%);
     	background-size: 2.5rem auto;
     	position: relative;
-    	z-index: 11;
+    	z-index: 999;
     }
 	.load_ellipse{
 		position: absolute;

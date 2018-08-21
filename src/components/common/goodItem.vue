@@ -7,14 +7,10 @@
             <h3 class="food_description_head">
                 <strong class="description_foodname">{{goodData.name}}</strong>
             </h3>
-            <p class="food_description_content">{{goodData.description}}</p>
-            <p class="food_description_sale_rating">
-                <span>月售123份</span>
-                <span>好评率100%</span>
+            <p class="food_description_sale_rating t-left">
+                <span class="good_hot">热度{{goodData.hotLevel || 100}}</span>
             </p>
-            <!-- <p v-if="foods.activity" class="food_activity">
-            <span :style="{color: '#' + foods.activity.image_text_color,borderColor:'#' +foods.activity.icon_color}">{{foods.activity.image_text}}</span>
-            </p> -->
+            <p class="food_description_content t-left">{{goodData.describe}}</p>
         </section>
     </div>
 </template>
@@ -23,29 +19,10 @@
     export default {
     	data(){
             return{
-                // image_path: null,
-                // description: null,
-                // month_sales: null,
-                // name: null,
-                // rating: null,
-                // rating_count: null,
-                // satisfy_rate: null,
-                // foods: null,
-                // shopId: null,
-                // imgBaseUrl,
             }
         },
         created(){
             console.log('this.goodData',this.goodData);
-        	// this.image_path = this.$route.query.image_path;
-         //    this.description = this.$route.query.description;
-         //    this.month_sales = this.$route.query.month_sales;
-         //    this.name = this.$route.query.name;
-         //    this.rating = this.$route.query.rating;
-         //    this.rating_count = this.$route.query.rating_count;
-         //    this.satisfy_rate = this.$route.query.satisfy_rate;
-         //    this.foods = this.$route.query.foods;
-         //    this.shopId = this.$route.query.shopId;
         },
         components: {
         	
@@ -59,7 +36,10 @@
 	
 <style lang="scss" scoped>
     @import 'src/style/mixin';
-	
+	.t-left{
+        text-align:left;
+    }
+
 	.rating_page{
 		position: absolute;
 		top: 0;
@@ -137,5 +117,9 @@
             }
         }
     }
+    span.good_hot{
+        color:$orange;
+    }
+
 
 </style>

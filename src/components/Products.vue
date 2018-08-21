@@ -119,7 +119,7 @@ import {
   addOrder
 } from '../service/orderBmob.js'
 import {getSchoolList} from '../service/commonData.js'
-
+import {addTrack} from '../service/accessData.js'
 import {setStore, getStore} from '../config/mUtils'
 import goodItem from './common/goodItem.vue'
 import BuyCart from './common/buyCart.vue'
@@ -190,6 +190,10 @@ export default {
        let _this = this;
        this.INIT_BUYCART();
        this.INIT_USERINFO();//初始化用户信息
+       addTrack({
+        phone:_this.userInfo.phone,
+        action:'products',
+       });
         //分类列表
         getMenuList((res)=>{
           console.log('getMenuList res',res);
@@ -298,6 +302,9 @@ export default {
       this.showInput = true;
     },
     submitOrder:function(params){
+      if(this.showLoading){//不可重复下单
+          return;
+      }
       var income = 0,goods=[],data = {},_this = this;
       _this.showLoading = true;
       for(var i = 0 ; i < this.cartFoodList.length ;i++){
@@ -320,6 +327,7 @@ export default {
       data.preference = this.discount;
       addOrder(data, res => {
           _this.showLoading = false;
+          _this.showInput = false;
           alert('订单提交成功');
           _this.CLEAR_CART();
           window.location.href = '/#/orders';

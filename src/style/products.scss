@@ -328,7 +328,7 @@
                         width: 100%;
                         .food_description_head{
                             @include fj;
-                            margin-bottom: .2rem;
+                            // margin-bottom: .2rem;
                             .description_foodname{
                                 @include sc(.7rem, #333);
                             }
@@ -373,7 +373,7 @@
                         .food_description_sale_rating{
                             line-height: .8rem;
                             span{
-                                @include sc(.5rem, #333);
+                                @include sc(.5rem, $orange);
                             }
                         }
                         .food_activity{
