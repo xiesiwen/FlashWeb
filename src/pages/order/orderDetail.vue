@@ -171,8 +171,9 @@
                 ]),
             initData(){
                 let _this = this;
+                let phone = _this.userInfo?_this.userInfo.phone:'';
                 addTrack({
-                    phone:_this.userInfo.phone,
+                    phone:phone,
                     action:'orderDetail',
                    });
                 _this.showLoading = true;

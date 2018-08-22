@@ -81,8 +81,9 @@
                 this.showLoading = false;
             }
             this.INIT_USERINFO();//初始化用户信息
+            let phone = _this.userInfo?_this.userInfo.phone:'';
             addTrack({
-                phone:_this.userInfo.phone,
+                phone:phone,
                 action:'orders',
                });
 

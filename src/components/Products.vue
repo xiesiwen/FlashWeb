@@ -6,24 +6,23 @@
           <section class="menu_container">
               <section class="menu_left" id="wrapper_menu" ref="wrapperMenu">
                   <ul>
-                      <li v-for="(item,index) in menuList" :key="index" class="menu_left_li" :class="{activity_menu: index == menuIndex}" @click="chooseMenu(index)">
+                      <li v-if='menuList.length' v-for="(item,index) in menuList" :key="index" class="menu_left_li" :class="{activity_menu: index == menuIndex}" @click="chooseMenu(index)">
                           <span>{{item.classify}}</span>
                           <span class="category_num" v-if="categoryNum[index]">{{categoryNum[index]}}</span>
                       </li>
                   </ul>
               </section>
               <section class="menu_right" ref="menuFoodList">
-                  <header class="menu_detail_header">
+                  <header class="menu_detail_header" v-if='curClassify'>
                       <section class="menu_detail_header_left">
-                          <strong class="menu_item_title">{{menuList[menuIndex].classify}}</strong>
-                          <span class="menu_item_description">{{menuList[menuIndex].classify}}</span>
+                          <strong class="menu_item_title">{{curClassify}}</strong>
+                          <span class="menu_item_description">{{curClassify}}</span>
                       </section>
                   </header>
                   <ul v-if='goodsList.length' >
                       <li v-for="(good,goodIndex) in goodsList" :key="goodIndex">
                           <section class="menu_detail_list">
                               <goodItem :good-data='good'></goodItem>  
-
                               <footer class="menu_detail_footer">
                                   <section class="food_price">
                                       <span>¥</span>
@@ -161,9 +160,10 @@ export default {
       return {...this.userInfo}
     },
     curClassify: function(){
-
         if(this.menuList.length){
-            return this.menuList[this.menuIndex].classify || '商品列表'
+            let str = '商品列表';
+            str = this.menuList[this.menuIndex]?this.menuList[this.menuIndex].classify || '商品列表':'商品列表';
+            return str;
         }
     },
     //购物车中总共商品的数量
@@ -190,8 +190,9 @@ export default {
        let _this = this;
        this.INIT_BUYCART();
        this.INIT_USERINFO();//初始化用户信息
+       let phone = _this.userInfo?_this.userInfo.phone:'';
        addTrack({
-        phone:_this.userInfo.phone,
+        phone:phone,
         action:'products',
        });
         //分类列表

@@ -34,3 +34,11 @@ export const getUserInfo = (succesCb,errorCb) => {
     console.log(err)
   });
 }
+
+export const addTrack = (data,succesCb,errorCb) => {
+    Bmob.User.users().then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.log(err)
+  });
+}
