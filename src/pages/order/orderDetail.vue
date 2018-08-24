@@ -2,7 +2,8 @@
   <div class="order_detail_page">
         <head-top head-title="订单详情" go-back='true'></head-top>
         <section v-if="!showLoading" id="scroll_section" class="scroll_container">
-            <section class="option-wrap" v-if='showFinishBtn||showSetDisInput'>
+            <section class="scroll_insert">
+                <section class="option-wrap" v-if='showFinishBtn||showSetDisInput'>
                 <section v-if="showSetDisInput" class="input_item">
                     <label class="item_label" for="">分配配送员</label>
                     <section class="item_input" >
@@ -20,8 +21,6 @@
                     </section>
                 </section>
             </section>
-            <!-- </section> -->
-            <section class="scroll_insert">
                 <section class="order_detail_style">
                     <header>订单信息</header>
                     <section class="item_style">
@@ -126,7 +125,7 @@
     import loading from '../../components/common/loading'
     import footGuide from '../../components/common/footer/footGuide.vue'
     import BScroll from 'better-scroll'
-
+    window.bs = null;
     export default {
 
       data(){
@@ -141,6 +140,7 @@
         },
         created(){
             this.orderId = this.$route.query.orderId;
+            
         },
         mounted(){
             if(!this.userInfo){
@@ -183,13 +183,13 @@
                         _this.productList = JSON.parse(res.data.products);
                         _this.showLoading = false;
                         _this.$nextTick(() => {
-                            new BScroll('#scroll_section', {  
+                            bs = new BScroll('#scroll_section', {  
                                 deceleration: 0.001,
                                 bounce: true,
                                 swipeTime: 1800,
                                 click: true,
-                            }); 
-                    })
+                            });     
+                        })
                     },err => {
                         _this.showLoading = false;
                     });
